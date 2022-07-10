@@ -12,4 +12,4 @@ class Keyboard(ABC):
     UP: Final = (KEY_UP, ord('w'))
     DOWN: Final = (KEY_DOWN, ord('s'))
     ENTER: Final = (KEY_ENTER, ord('\n'))
-    SELECT: Final = (ord(' '), )
+    SELECT: Final = (ord(' '),)
