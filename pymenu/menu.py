@@ -1,41 +1,35 @@
 import curses
+from abc import ABC
 from curses import wrapper, use_default_colors, curs_set
-from typing import List
-from pymenu.misc import Item, Keyboard
+from typing import List, Callable
+from pymenu.misc import Item, Keyboard, FunctionalItem
 
 
-class SelectorMenu:
+class __BaseMenu(ABC):
 
-    def __init__(self, options: List[str], title: str = '', default_index: int = 0, indicator: str = "->"):
+    def __init__(self, options: list, title: str = '', default_index: int = 0, indicator: str = "->"):
         if len(options) == 0:
             raise Exception('must contains 1 element')
         if 0 <= default_index >= len(options):
             raise ValueError('default_index should be less than the length of options')
-
-        self._options = options
+        if not len(indicator):
+            raise Exception
         self._title = title
+        self._options = options
         self._index = default_index
         self._indicator = indicator
         self._scroll_top = 0
 
-    def get_selected(self) -> Item:
-        return Item(name=self._options[self._index], index=self._index)
+        self._config = {
+            Keyboard.UP: self.go_up,
+            Keyboard.DOWN: self.go_down,
+        }
+        self._returnable_config = {
+            Keyboard.ENTER: self.get_selected
+        }
+        self._titles = self._get_titles()
 
-    def get_option_lines(self):
-        lines = []
-        for index, option in enumerate(self._options):
-            if index == self._index:
-                prefix = self._indicator
-            else:
-                prefix = len(self._indicator) * ' '
-            lines.append(f'{prefix} {option}')
-        return lines
-
-    def get_lines(self):
-        title_lines = self._title.split('\n')
-        current_line_y = self._index + len(title_lines) + 1
-        lines = title_lines + self.get_option_lines()
-        return lines, current_line_y
+    # region Ideal
 
     def go_up(self):
         self._index = (self._index - 1) % len(self._options)
@@ -43,55 +37,63 @@ class SelectorMenu:
     def go_down(self):
         self._index = (self._index + 1) % len(self._options)
 
+    def input(self):
+        return wrapper(self.run_loop)
+
+    def _get_titles(self):
+        return self._options
+
+    def get_selected(self):
+        raise NotImplementedError
+
+    def run_loop(self, screen):
+        use_default_colors()
+        curs_set(0)
+        while True:
+            self.draw(screen)
+            key = screen.getch()
+            for keys in self._config.keys():
+                if key in keys:
+                    self._config[keys]()
+                    break
+            for keys in self._returnable_config.keys():
+                if key in keys:
+                    return self._returnable_config[keys]()
+
+    # endregion
+
     def draw(self, screen) -> None:
         screen.clear()
 
         max_y, max_x = screen.getmaxyx()
 
-        lines, current_line = self.get_lines()
+        y = 0
 
-        if current_line <= self._scroll_top:
-            self._scroll_top = 0
-        elif current_line - self._scroll_top > max_y:
-            self._scroll_top = current_line - max_y
+        for line in self._title.split('\n'):
+            screen.addnstr(y, 0, line, max_x)
+            y += 1
 
-        lines_to_draw = lines[self._scroll_top:self._scroll_top + max_y]
-
-        for y, line in enumerate(lines_to_draw):
-            screen.addnstr(y, 0, line, max_x - 2)
+        for local_y, line in enumerate(self._title):
+            if local_y == self._index:
+                line = f'{self._indicator}{line}'
+            else:
+                line = f'{" " * len(self._indicator)}{line}'
+            screen.addnstr(y, 0, line, max_x)
             y += 1
 
         screen.refresh()
 
-    def run_loop(self, screen):
-        config = {
-            Keyboard.UP: self.go_up,
-            Keyboard.DOWN: self.go_down,
-        }
-        returnable_config = {
-            Keyboard.ENTER: self.get_selected,
-        }
-        while True:
-            self.draw(screen)
-            key = screen.getch()
-            for keys in config.keys():
-                if key in keys:
-                    config[keys]()
-                    break
-            for keys in returnable_config.keys():
-                if key in keys:
-                    return returnable_config[keys]()
 
-    def __start(self, screen):
-        use_default_colors()
-        curs_set(0)
-        return self.run_loop(screen)
+class SelectorMenu(__BaseMenu):
 
-    def input(self):
-        return wrapper(self.__start)
+    def __init__(self, options: List[str], title: str = '', default_index: int = 0, indicator: str = "->"):
+        super().__init__(options, title, default_index, indicator)
+
+    def get_selected(self) -> Item:
+        return Item(name=self._options[self._index], index=self._index)
 
 
-class MultiSelectorMenu(SelectorMenu):
+class MultiSelectorMenu(__BaseMenu):
 
     def __init__(self, options: List[str], count: int, title: str = '', default_index: int = 0, indicator: str = "->"):
         if 1 <= count > len(options):
@@ -99,26 +101,9 @@ class MultiSelectorMenu(SelectorMenu):
         self.count = count
         self.selected: list[int] = []
         super().__init__(options, title, default_index, indicator)
-
-    def run_loop(self, screen):
-        config = {
-            Keyboard.UP: self.go_up,
-            Keyboard.DOWN: self.go_down,
+        self._config.update({
             Keyboard.SELECT: self.select
-        }
-        returnable_config = {
-            Keyboard.ENTER: self.get_selected,
-        }
-        while True:
-            self.draw(screen)
-            key = screen.getch()
-            for keys in config.keys():
-                if key in keys:
-                    config[keys]()
-                    break
-            for keys in returnable_config.keys():
-                if key in keys:
-                    return returnable_config[keys]()
+        })
 
     def select(self):
         if self._index in self.selected:
@@ -138,14 +123,14 @@ class MultiSelectorMenu(SelectorMenu):
 
         max_y, max_x = screen.getmaxyx()
 
-        lines, current_line = self.get_lines()
+        current_line = len(self._title.split('\n'))
 
         if current_line <= self._scroll_top:
             self._scroll_top = 0
         elif current_line - self._scroll_top > max_y:
             self._scroll_top = current_line - max_y
 
-        lines_to_draw = lines[self._scroll_top:self._scroll_top + max_y]
+        lines_to_draw = self._titles[self._scroll_top:self._scroll_top + max_y]
 
         for y, line in enumerate(lines_to_draw):
             if y - len(self._title.split('\n')) in self.selected:
@@ -155,3 +140,15 @@ class MultiSelectorMenu(SelectorMenu):
             y += 1
 
         screen.refresh()
+
+
+class FunctionalMenu(__BaseMenu):
+
+    def __init__(self, options: List[FunctionalItem], title: str = '', default_index: int = 0, indicator: str = "->"):
+        super().__init__(options, title, default_index, indicator)
+
+    def get_selected(self) -> Callable:
+        return self._options[self._index].func
+
+    def _get_titles(self):
+        return [option.name for option in self._options]
