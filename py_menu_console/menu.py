@@ -1,5 +1,5 @@
 import curses
-from typing import Callable, Union
+from typing import Callable, Union, List
 from .base import BaseMenu
 from .misc import Option, Keyboard, FunctionalOption
 
@@ -35,7 +35,7 @@ class MultiSelectorMenu(BaseMenu):
     :param count: a number of max chosen options
     """
 
-    def __init__(self, options: list[str], title: str = '',  default_index: int = 0, indicator: str = "->",
+    def __init__(self, options: List[str], title: str = '',  default_index: int = 0, indicator: str = "->",
                  count: int = None) -> None:
 
         count = len(options) if not count else count
@@ -44,7 +44,7 @@ class MultiSelectorMenu(BaseMenu):
 
         super().__init__(options, title, default_index, indicator)
         self.__count = count
-        self.__selected: list[int] = []
+        self.__selected: List[int] = []
         self._control_config[Keyboard.SELECT] = self.__select
 
     # region Private
@@ -71,7 +71,7 @@ class MultiSelectorMenu(BaseMenu):
                 screen.addnstr(self._y, 0, line, max_x)
             self._y += 1
 
-    def _get_selected(self) -> Union[list[Option], None]:
+    def _get_selected(self) -> Union[List[Option], None]:
         if not self.__selected:
             return
         return [Option(index=i, name=self._options[i]) for i in sorted(self.__selected)]
@@ -95,11 +95,11 @@ class FunctionalMenu(BaseMenu):
     :param indicator: (optional) customize the selection indicator
     """
 
-    def __init__(self, options: list[FunctionalOption], title: str = '', default_index: int = 0,
+    def __init__(self, options: List[FunctionalOption], title: str = '', default_index: int = 0,
                  indicator: str = "->") -> None:
 
-        self.__functions: list[Callable] = []
-        local_options: list[str] = []
+        self.__functions: List[Callable] = []
+        local_options: List[str] = []
         for option in options:
             self.__functions.append(option.func)
             local_options.append(option.name)

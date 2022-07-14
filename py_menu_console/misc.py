@@ -1,6 +1,6 @@
 from abc import ABC
 from curses import KEY_UP, KEY_DOWN, KEY_ENTER
-from typing import NamedTuple, Final, Callable
+from typing import NamedTuple, Callable
 
 
 class Option(NamedTuple):
@@ -22,7 +22,7 @@ class FunctionalOption(NamedTuple):
 
 
 class Keyboard(ABC):
-    UP: Final = (KEY_UP, ord('w'))
-    DOWN: Final = (KEY_DOWN, ord('s'))
-    APPROVE: Final = (KEY_ENTER, ord('\n'))
-    SELECT: Final = (ord(' '),)
+    UP = (KEY_UP, ord('w'))
+    DOWN = (KEY_DOWN, ord('s'))
+    APPROVE = (KEY_ENTER, ord('\n'))
+    SELECT = (ord(' '),)

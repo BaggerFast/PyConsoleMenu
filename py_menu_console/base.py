@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, List
 from abc import ABC
 from curses import wrapper, use_default_colors, curs_set
 import _curses
@@ -15,7 +15,7 @@ class BaseMenu(ABC):
     :param indicator: (optional) customize the selection indicator
     """
 
-    def __init__(self, options: list[str], title: str = '', default_index: int = 0, indicator: str = "->") -> None:
+    def __init__(self, options: List[str], title: str = '', default_index: int = 0, indicator: str = "->") -> None:
 
         # region parse Exceptions
 

@@ -1,4 +1,4 @@
-from pymenu import MultiSelectorMenu, FunctionalOption, SelectorMenu, FunctionalMenu
+from py_menu_console import MultiSelectorMenu, FunctionalOption, SelectorMenu, FunctionalMenu
 
 
 def multi_selector():
