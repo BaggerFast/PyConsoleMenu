@@ -14,7 +14,7 @@ Includes: SelectorMenu, MultipleSelectorMenu, FunctionalMenu.
 ## Installation 💾
 - using pip
 ```
-$ pip install py_menu_console
+$ pip install PyConsoleMenu
 ```
 
 - using GitHub *(требуется [git](https://git-scm.com/downloads))*
@@ -29,9 +29,10 @@ $ pip install -r requirements.txt
 - Type hints
 
 
-## Usage example 👨‍💻 
+## Usage example 👨‍💻
+
 ```py
-from py_menu_console import MultiSelectorMenu, FunctionalOption, SelectorMenu, FunctionalMenu
+from PyConsoleMenu import MultiSelectorMenu, FunctionalOption, SelectorMenu, FunctionalMenu
 
 
 def multi_selector():

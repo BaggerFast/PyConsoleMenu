@@ -1,7 +1,7 @@
 from unittest import TestCase
 
-from py_menu_console.menu import SelectorMenu, MultiSelectorMenu, FunctionalMenu
-from py_menu_console.misc import FunctionalOption
+from PyConsoleMenu.menu import SelectorMenu, MultiSelectorMenu, FunctionalMenu
+from PyConsoleMenu.misc import FunctionalOption
 
 
 class TestCreation(TestCase):
