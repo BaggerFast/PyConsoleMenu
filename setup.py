@@ -10,7 +10,7 @@ setup(
     long_description='Contains: SelectorMenu, MultiSelectorMenu, FunctionalMenu',
     url='https://github.com/BaggerFast/PyConsoleMenu',
     downoload_url='?',
-    keywords='?',
+    keywords='python menu, console menu, menu, curses menu, python console menu',
     install_requires=[
         "widows-curses; sys_platform == 'win32'"
     ],

@@ -7,7 +7,7 @@ Ideal for people who want to quickly make a menu without writing their own compl
 Includes: SelectorMenu, MultipleSelectorMenu, FunctionalMenu.
 
 ## Preview
-![Selector](https://github.com/BaggerFast/PyConsoleMenu/tree/main/assets/selector.gif)
+![Selector](https://github.com/BaggerFast/PyConsoleMenu/blob/main/assets/selector.gif?raw=true)
 
 [See other](https://github.com/BaggerFast/PyConsoleMenu/tree/main/assets)
 
@@ -20,7 +20,7 @@ $ pip install py_menu_console
 - using GitHub *(требуется [git](https://git-scm.com/downloads))*
 ```
 $ git clone https://github.com/BaggerFast/PyConsoleMenu
-$ cd PyConsoleMemu
+$ cd PyConsoleMenu
 $ pip install -r requirements.txt
 ```
 

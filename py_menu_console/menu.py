@@ -41,7 +41,7 @@ class MultiSelectorMenu(BaseMenu):
     def __init__(self, options: List[str], title: str = '',  default_index: int = 0, indicator: str = "->",
                  count: int = None) -> None:
 
-        count = len(options) if count <= 0 else count
+        count = len(options) if not count else count
         if 1 <= count > len(options):
             raise ValueError('Count  must be in [2, len(options)]')
 
