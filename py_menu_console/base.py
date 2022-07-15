@@ -12,7 +12,7 @@ class BaseMenu(ABC):
     :param options: a list of options to choose from
     :param title: (optional) a title above options list
     :param default_index: (optional) set this if the default selected option is not the first one
-    :param indicator: (optional) customize the selection indicator
+    :param indicator: (optional) customize the selection indicator.
     """
 
     def __init__(self, options: List[str], title: str = '', default_index: int = 0, indicator: str = "->") -> None:
@@ -100,6 +100,9 @@ class BaseMenu(ABC):
     # region Public
 
     def input(self) -> Any:
+        """
+        Return input info from menu
+        """
         return wrapper(self._run_loop)
 
     # endregion

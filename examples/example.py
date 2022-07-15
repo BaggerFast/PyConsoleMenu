@@ -15,8 +15,8 @@ def selector():
 
 def functional():
     data = [
-        FunctionalOption('Cheburashka', lambda _: print('I am a Parrot')),
-        FunctionalOption('Parrot', lambda _: print('I am a Cheburashka')),
+        FunctionalOption('Cheburashka', lambda: print('I am a Parrot')),
+        FunctionalOption('Parrot', lambda: print('I am a Cheburashka')),
     ]
     menu = FunctionalMenu(data, title='Functional')
     ans = menu.input()

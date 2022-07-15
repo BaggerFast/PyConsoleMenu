@@ -5,8 +5,8 @@ from typing import NamedTuple, Callable
 
 class Option(NamedTuple):
     """
-    :param name: name of chosen item in menu
-    :param index: index of chosen item in menu
+    :param name: name of chosen item in a menu
+    :param index: index of chosen item in a menu.
     """
     name: str
     index: int
@@ -15,7 +15,7 @@ class Option(NamedTuple):
 class FunctionalOption(NamedTuple):
     """
     :param name: name of option
-    :param func: func of option, will be return after functional menu
+    :param func: func of option, will be return after a functional menu.
     """
     name: str
     func: Callable

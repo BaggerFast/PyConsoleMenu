@@ -11,8 +11,11 @@ class SelectorMenu(BaseMenu):
     :param options: a list of options to choose from
     :param title: (optional) a title above options list
     :param default_index: (optional) set this if the default selected option is not the first one
-    :param indicator: (optional) customize the selection indicator
+    :param indicator: (optional) customize the selection indicator.
     """
+
+    def __init__(self, options: List[str], title: str = '', default_index: int = 0, indicator: str = "->") -> None:
+        super().__init__(options, title, default_index, indicator)
 
     def _get_selected(self) -> Option:
         return Option(name=self._options[self._index], index=self._index)
@@ -32,13 +35,13 @@ class MultiSelectorMenu(BaseMenu):
     :param title: (optional) a title above options list
     :param default_index: (optional) set this if the default selected option is not the first one
     :param indicator: (optional) customize the selection indicator
-    :param count: a number of max chosen options
+    :param count: a number of max chosen options.
     """
 
     def __init__(self, options: List[str], title: str = '',  default_index: int = 0, indicator: str = "->",
                  count: int = None) -> None:
 
-        count = len(options) if not count else count
+        count = len(options) if count <= 0 else count
         if 1 <= count > len(options):
             raise ValueError('Count  must be in [2, len(options)]')
 
@@ -78,7 +81,7 @@ class MultiSelectorMenu(BaseMenu):
 
     # endregion
 
-    def input(self) -> list[Option]:
+    def input(self) -> List[Option]:
         """
         Return list of chosen options as Items
         """
@@ -92,7 +95,7 @@ class FunctionalMenu(BaseMenu):
     :param options: a list of options to choose from
     :param title: (optional) a title above options list
     :param default_index: (optional) set this if the default selected option is not the first one
-    :param indicator: (optional) customize the selection indicator
+    :param indicator: (optional) customize the selection indicator.
     """
 
     def __init__(self, options: List[FunctionalOption], title: str = '', default_index: int = 0,
