@@ -1,5 +1,6 @@
 # PyConsoleMenu
-![Language](https://img.shields.io/badge/Language-Python3.7+-blue.svg?style=flat)
+
+[![CodeFactor](https://www.codefactor.io/repository/github/baggerfast/pyconsolemenu/badge)](https://www.codefactor.io/repository/github/baggerfast/pyconsolemenu)
 [![BUILD-STATUS](https://github.com/BaggerFast/PyConsoleMenu/workflows/CI/badge.svg)](https://github.com/BaggerFast/PyConsoleMenu/actions)
 
 A simple Python menu in the terminal using curses. 
